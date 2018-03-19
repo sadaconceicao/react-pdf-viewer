@@ -1,0 +1,7 @@
+{
+    "extends": "react-app",
+    "rules": {
+        "no-useless-escape": "off",
+        "array-callback-return": "off"
+    }
+}

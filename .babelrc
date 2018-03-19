@@ -1,0 +1,11 @@
+{
+  "plugins": ["transform-export-extensions"],
+  "presets": [ "env", "react", "es2015", "react-app" ],
+  "env": {
+    "test": {
+      "plugins": [
+        "istanbul"
+      ]
+    }
+  }
+}
