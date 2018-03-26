@@ -1,0 +1,94 @@
+@import "../styles/utilities";
+
+$pdf-header-height: 4.2rem;
+$pdf-header-font: #fefefe;
+$pdf-header-background: #333;
+$pdf-viewer-background: #bbb;
+
+.pdf-viewer {
+    position: relative;
+    width: 100%;
+    .loading {
+        display: none;
+    }
+    .loaded {
+        margin-top: 2.2rem;
+    }
+    .pdf-viewer-container {
+        overflow: auto;
+        margin-top: $pdf-header-height;
+        background-color: $pdf-viewer-background;
+        canvas {
+            display: block;
+            margin: 2rem auto;
+            &:first-child {
+                margin-top: 0;
+            }
+        }
+    }
+
+    .pdf-header-controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: fixed;
+        z-index: 5;
+        background-color: $pdf-header-background;
+        color: $pdf-header-font;
+        border-bottom: darken($pdf-header-background, .5);
+        height: $pdf-header-height;
+        line-height: 1rem;
+    }
+    .pdf-header-controls-left {
+        margin-left: .5rem;
+    }
+    .pdf-header-controls-right {
+        margin-right: .5rem;
+    }
+    .pdf-header-page-input {
+        display: inline-block;
+        width: 2rem;
+        text-align: center;
+    }
+    .pdf-header-page-total {
+        margin-left: .5rem;
+        display: inline-block;
+    }
+
+    &.default canvas {
+        max-width: calc(100% - 3rem);
+    }
+
+    @include media-breakpoint-down(sm) {
+        margin-top: 2.8rem;
+        .pdf-header-controls {
+            top: 0;
+            width: 100%;
+            padding-left: 1rem;
+        }
+
+        .pdf-header-page-display {
+            height: 2.8rem;
+            margin-top:.8rem;
+        }
+
+        &.default canvas {
+            margin: 2rem;
+        }
+
+        .pdf-viewer-container {
+            height: calc(100vh - #{$pdf-header-height});
+        }
+    }
+
+    @include media-breakpoint-up(md) {
+        .pdf-viewer-container{
+            height: calc(100vh - #{$pdf-header-height});
+        }
+        .pdf-header-controls {
+            width: 100%;
+            top: 0;
+            margin-left: 0;
+        }
+    }
+}

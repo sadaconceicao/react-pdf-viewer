@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
@@ -13,18 +14,13 @@ const publicPath = '/';
 const publicUrl = '';
 const env = getClientEnvironment(publicUrl);
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
-let bootEntry;
-
-if (process.argv.some(arg => arg.indexOf('deploy=true') > 1 ) ){
-    bootEntry = [require.resolve('./polyfills'), paths.appIndexJs ];
-} else {
-    bootEntry = [require.resolve('react-dev-utils/webpackHotDevClient'), require.resolve('./polyfills'), paths.appIndexJs ];
-}
+const bootEntry = [require.resolve('react-dev-utils/webpackHotDevClient'), require.resolve('./polyfills'), paths.appIndexJs ];
 
 module.exports = {
     devtool: 'cheap-module-source-map',
     entry: {
         boot: bootEntry,
+        example: paths.appExampleJs,
         vendor: [ "react", "react-dom"]
     },
     output: {
@@ -123,8 +119,14 @@ module.exports = {
             template: paths.appHtml,
         }),
         new webpack.DefinePlugin(env.stringified),
-        new webpack.DefinePlugin({MOCKS_ENABLED: (process.argv.some(arg => arg.indexOf('mocks=true') > 1 ) || false)}),
         new webpack.HotModuleReplacementPlugin(),
+        new CopyWebpackPlugin([
+                { from: paths.node + '/pdfjs-dist/build/pdf.min.js', to: 'static/js/pdf.min.js'},
+                { from: paths.node + '/pdfjs-dist/build/pdf.worker.min.js', to: 'static/js/pdf.worker.min.js'},
+                { from: paths.node + '/pdfjs-dist/build/pdf.js', to: 'static/js/pdf.js'},
+                { from: paths.node + '/pdfjs-dist/build/pdf.worker.js', to: 'static/js/pdf.worker.js'},
+                { from: paths.node + '/pdfjs-dist/build/pdf.combined.js', to: 'static/js/pdf.combined.js'}
+        ]),
         new CaseSensitivePathsPlugin(),
         new WatchMissingNodeModulesPlugin(paths.appNodeModules)
     ],
