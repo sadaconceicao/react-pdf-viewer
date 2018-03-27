@@ -1,4 +1,4 @@
-#React PDF Viewer
+# React PDF Viewer
 
 ## Details
 PDF.js viewer built with react
