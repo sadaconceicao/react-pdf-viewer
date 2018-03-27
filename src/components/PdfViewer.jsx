@@ -24,6 +24,7 @@ export class PDFViewer extends React.Component {
         };
         bindAll( this, [
             'onDocumentComplete',
+            'onError',
             'onPinch',
             'onPanEnd',
             'onPan',
@@ -103,6 +104,10 @@ export class PDFViewer extends React.Component {
         this.setState({ page: 1, pageTemp: 1, pages, loaded: true});
     }
 
+    onError(error){
+        this.setState({ loaded:true, error });
+    }
+
     onPageBlur(e){
         let page =  e.target.value;
         this.setState({pageTemp: page});
@@ -150,7 +155,7 @@ export class PDFViewer extends React.Component {
     }
 
     render() {
-        const {file, pages, page, pageTemp, loaded, scale, rotation, x, y} = this.state;
+        const {file, pages, page, pageTemp, loaded, error, scale, rotation, x, y} = this.state;
         return (
             <div className={`pdf-viewer ${scale !== 1 ? 'zoomed' : 'default'}`}>
                 <PdfHeader
@@ -176,9 +181,11 @@ export class PDFViewer extends React.Component {
                              scale={scale}
                              rotation={rotation}
                              onDocumentComplete={this.onDocumentComplete}
+                             onError={this.onError}
                              page={this.state.page}/>
                     </div>
                     {!loaded && <FaSpinner/>}
+                    {error && <div className="pdf-viewer-error">{error}</div>}
                 </div>
             </div>
         )

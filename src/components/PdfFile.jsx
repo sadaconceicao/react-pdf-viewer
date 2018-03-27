@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PdfPage from './PdfPage';
-import FaSpinner from 'react-icons/lib/fa/spinner';
 
 class Pdf extends Component {
 
@@ -41,6 +40,7 @@ class Pdf extends Component {
 
     onDocumentError(error) {
         console.error(`${this.toString()} -- ERROR in loading file`, error);
+        this.props.onError(error);
     }
 
     getDocument(val) {
@@ -53,6 +53,7 @@ class Pdf extends Component {
     loadPDFDocument(props) {
         if (props.file && typeof props.file === 'string') {
             this.pdfCheck = setInterval(()=> {
+                //Only load pdf if pdf.js library has been loaded
                 if (window.PDFJS) {
                     this.getDocument(props.file);
                     clearInterval(this.pdfCheck);
@@ -60,13 +61,15 @@ class Pdf extends Component {
             }, 200)
 
         } else {
-            throw new Error('File param is required');
+           console.error(`${this.toString()} -- A file param is required`);
+           this.props.onError('A file param is required');
         }
     }
 
     render() {
         const {pdf} = this.state,
             {rotation} = this.props;
+
         if (pdf) {
             return (
                 <div className="pdf-list">
@@ -83,7 +86,7 @@ class Pdf extends Component {
                 </div>
             );
         } else {
-            return <FaSpinner/>;
+            return null;
         }
     }
 }

@@ -1,6 +1,6 @@
 /**
- *
- * @param element
+ * Checks if element is currently visible on page
+ * @param element {Object} Element to check visibility of
  * @returns {boolean}
  */
 
@@ -13,10 +13,10 @@ export function isElementVisible(element) {
 }
 
 /**
- *
- * @param element
- * @param to
- * @param duration
+ * Animated scroll to element with time to animate
+ * @param element {Object} Element to scroll
+ * @param to {integer} Position to scroll to
+ * @param duration  {integer} Time of animation
  */
 
 export function scrollToVertical(element, to, duration) {
