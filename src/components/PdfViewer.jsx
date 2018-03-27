@@ -33,7 +33,9 @@ export class PDFViewer extends React.Component {
             'onPageEnter',
             'onZoomIn',
             'onZoomOut',
-            'onRotate'
+            'onRotate',
+            'onNext',
+            'onPrev'
         ]);
     }
 
@@ -73,14 +75,17 @@ export class PDFViewer extends React.Component {
     }
 
     onPan(e) {
-        this.setState({
+        this.state.scale !== 1 && this.setState({
             x: this.state.deltaX + (e.deltaX / this.state.scale) * 1.5,
             y: this.state.deltaY + (e.deltaY / this.state.scale) * 1.5
         });
     }
 
     onPanEnd(){
-        this.setState({deltaX: this.state.x, deltaY: this.state.y});
+        this.state.scale !== 1 && this.setState({
+            deltaX: this.state.x,
+            deltaY: this.state.y
+        });
     }
 
     onScroll(){
@@ -125,10 +130,18 @@ export class PDFViewer extends React.Component {
         this.setState({scale: this.state.scale / 1.5});
     }
 
+    onPrev(){
+        this.gotoPage(this.state.page-1);
+    }
+
+    onNext(){
+        this.gotoPage(this.state.page+1);
+    }
+
     gotoPage(page){
         const canvasElements = document.querySelectorAll('.pdf-viewer-loader canvas');
         this.setState({page, pageTemp: page});
-        scrollToVertical(this.viewer, canvasElements[page-1].offsetTop, 500, this.state.scale);
+        scrollToVertical(this.viewer, canvasElements[page-1].offsetTop + 20, 500, this.state.scale);
     }
 
     getPDFWidth(){
@@ -147,7 +160,8 @@ export class PDFViewer extends React.Component {
                     onZoomIn={this.onZoomIn}
                     onZoomOut={this.onZoomOut}
                     onRotate={this.onRotate}
-                    onDownload={this.onDownload}
+                    onNext={this.onNext}
+                    onPrev={this.onPrev}
                     file={file}
                     pages={pages}
                     page={page}
